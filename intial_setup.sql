@@ -4,7 +4,7 @@ CREATE ROLE snowsarva_role;
 
 -- Grant the snowsarva_role to the user 
 GRANT ROLE snowsarva_role TO USER snowsarva_user;
-ALTER USER snowsarva_user ADD PROGRAMMATIC ACCESS TOKEN test_token;
+ALTER USER snowsarva_user ADD PROGRAMMATIC ACCESS TOKEN snownew;
 ALTER USER snowsarva_user SET NETWORK_POLICY = my_ip;
 
 -- Grant required privileges to the role
@@ -27,6 +27,13 @@ CREATE OR REPLACE WAREHOUSE snowsarva_warehouse
   INITIALLY_SUSPENDED = false;
 
 -- Create the image repository used by the app
-CREATE DATABASE snowsarva_image_database;
-CREATE SCHEMA snowsarva_image_schema;
-CREATE IMAGE REPOSITORY snowsarva_image_repo;
+CREATE or replace DATABASE snowsarva_image_database;
+CREATE or replace SCHEMA snowsarva_image_schema;
+create stage if not exists snowsarva_image_database.snowsarva_image_schema.app_stage;
+CREATE or replace IMAGE REPOSITORY snowsarva_image_repo;
+use role accountadmin;
+
+use role snowsarva_role;
+show image repositories in schema snowsarva_image_database.snowsarva_image_schema;
+
+grant imported privileges on database snowflake to role snowsarva_role;
